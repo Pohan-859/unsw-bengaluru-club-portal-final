@@ -2,6 +2,7 @@ import { type NextAuthOptions } from "next-auth";
 import AzureADProvider from "next-auth/providers/azure-ad";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "@/lib/prisma";
+import { Role } from "@prisma/client";
 
 const adminEmails = (process.env.ADMIN_EMAILS ?? "")
   .split(",")
@@ -34,8 +35,9 @@ export const authOptions: NextAuthOptions = {
         const email = credentials.email.trim().toLowerCase();
         const name = credentials.name?.trim() || email.split("@")[0];
         
-        let role = credentials.role === "ADMIN" || adminEmails.includes(email) ? "ADMIN" : "STUDENT";
-        
+        const roleStr = credentials.role === "ADMIN" || adminEmails.includes(email) ? "ADMIN" : "STUDENT";
+        const role = roleStr as Role;
+
         const dbUser = await prisma.user.upsert({
           where: { email },
           update: { name },
@@ -71,7 +73,8 @@ export const authOptions: NextAuthOptions = {
           token.id = dbUser.id;
           token.role = dbUser.role as "STUDENT" | "ADMIN";
         } else {
-          const role = adminEmails.includes(email) ? "ADMIN" : "STUDENT";
+          const roleStr = adminEmails.includes(email) ? "ADMIN" : "STUDENT";
+          const role = roleStr as Role;
           const newUser = await prisma.user.upsert({
             where: { email },
             update: { name: user.name, image: user.image },
