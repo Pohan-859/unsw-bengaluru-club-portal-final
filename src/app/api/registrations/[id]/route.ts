@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
+import { revalidatePath } from "next/cache";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { slugify } from "@/lib/utils";
@@ -49,6 +50,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
           category: registration.category,
           description: registration.description,
           meetingInfo: registration.meetingPlan,
+          isActive: true,
         },
       });
 
@@ -66,6 +68,12 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
 
     return reg;
   });
+
+  // Purge Next.js static cache so newly approved clubs show up instantly
+  revalidatePath("/clubs");
+  revalidatePath("/");
+  revalidatePath("/dashboard");
+  revalidatePath("/admin/registrations");
 
   return NextResponse.json({ registration: updated });
 }

@@ -6,6 +6,9 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import ApplyForm from "@/components/ApplyForm";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 async function getClub(slug: string) {
   return prisma.club.findUnique({ where: { slug } });
 }

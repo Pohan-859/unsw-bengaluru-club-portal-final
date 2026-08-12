@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import ClubCard from "@/components/ClubCard";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 const HERO_PLACARDS = [
   { code: "BUS·01", label: "Business & Finance", href: "/clubs?category=Business+%26+Finance" },
