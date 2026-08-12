@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
+import { revalidatePath } from "next/cache";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
@@ -39,6 +40,8 @@ export async function PATCH(req: NextRequest) {
     where: { id: userId },
     data: { role },
   });
+
+  revalidatePath("/admin/students");
 
   return NextResponse.json({ user: updatedUser });
 }

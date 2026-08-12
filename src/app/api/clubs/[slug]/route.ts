@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { sanitizeText, sanitizeUrl, sanitizeEmail } from "@/lib/sanitize";
 import { checkApiRateLimit } from "@/lib/rate-limit";
+import { revalidatePath } from "next/cache";
 
 export async function GET(req: NextRequest, { params }: { params: { slug: string } }) {
   const club = await prisma.club.findUnique({
@@ -93,6 +94,9 @@ export async function PATCH(req: NextRequest, { params }: { params: { slug: stri
       ...(instagram !== undefined && { instagram: instagram || null }),
     },
   });
+
+  revalidatePath(`/clubs/${updatedClub.slug}`);
+  revalidatePath("/clubs");
 
   return NextResponse.json({ club: updatedClub });
 }

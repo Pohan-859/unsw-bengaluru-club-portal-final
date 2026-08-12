@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
+import { revalidatePath } from "next/cache";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
@@ -23,7 +24,14 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   const membership = await prisma.membership.update({
     where: { id: params.id },
     data: { status, feedback: feedback ?? null },
+    include: { club: { select: { slug: true } } },
   });
+
+  revalidatePath("/admin/students");
+  revalidatePath("/dashboard");
+  if (membership.club?.slug) {
+    revalidatePath(`/clubs/${membership.club.slug}`);
+  }
 
   return NextResponse.json({ membership });
 }
