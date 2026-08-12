@@ -1,8 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/microfrontends.json",
-  "apps": {
+  "version": 1,
+  "applications": {
     "main": {
-      "default": true
+      "path": "/"
     }
   }
 }
