@@ -2,6 +2,8 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import ClubCard from "@/components/ClubCard";
 
+export const dynamic = "force-dynamic";
+
 const HERO_PLACARDS = [
   { code: "BUS·01", label: "Business & Finance", href: "/clubs?category=Business+%26+Finance" },
   { code: "TEC·04", label: "Technology", href: "/clubs?category=Technology" },

@@ -4,6 +4,8 @@ import StatusBadge from "@/components/StatusBadge";
 import AdminDecisionButtons from "@/components/AdminDecisionButtons";
 import { formatDate } from "@/lib/utils";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Review club proposals",
   robots: { index: false },
