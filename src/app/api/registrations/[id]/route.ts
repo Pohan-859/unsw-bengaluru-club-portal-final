@@ -5,17 +5,13 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { slugify } from "@/lib/utils";
 
-// PATCH /api/registrations/[id]
-// body: { status: "APPROVED" | "REJECTED", feedback?: string }
-// Approving provisions the live Club record and makes the proposer its
-// founding EXECUTIVE with an already-APPROVED membership.
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);
   if (session?.user?.role !== "ADMIN") {
     return NextResponse.json({ error: "Admin access required" }, { status: 403 });
   }
 
-  const { status, feedback } = (await req.json()) as {
+  const { status, feedback } = (await req.json().catch(() => ({}))) as {
     status?: "APPROVED" | "REJECTED";
     feedback?: string;
   };
@@ -43,6 +39,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
         slug = `${slugify(registration.name)}-${suffix}`;
       }
 
+      // 1. Create the live Club record
       const club = await tx.club.create({
         data: {
           name: registration.name,
@@ -54,23 +51,28 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
         },
       });
 
-      await tx.membership.upsert({
-        where: { userId_clubId: { userId: registration.proposedBy, clubId: club.id } },
-        update: { role: "EXECUTIVE", status: "APPROVED" },
-        create: {
-          userId: registration.proposedBy,
-          clubId: club.id,
-          role: "EXECUTIVE",
-          status: "APPROVED",
-        },
-      });
+      // 2. Safely attach proposer as founding EXECUTIVE if user exists
+      const user = await tx.user.findUnique({ where: { id: registration.proposedBy } });
+      if (user) {
+        await tx.membership.upsert({
+          where: { userId_clubId: { userId: user.id, clubId: club.id } },
+          update: { role: "EXECUTIVE", status: "APPROVED" },
+          create: {
+            userId: user.id,
+            clubId: club.id,
+            role: "EXECUTIVE",
+            status: "APPROVED",
+          },
+        });
+      }
     }
 
     return reg;
   });
 
-  // Purge Next.js static cache so newly approved clubs show up instantly
+  // Revalidate static caches across Next.js pages
   revalidatePath("/clubs");
+  revalidatePath("/clubs/[slug]", "page");
   revalidatePath("/");
   revalidatePath("/dashboard");
   revalidatePath("/admin/registrations");

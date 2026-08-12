@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { sanitizeText } from "@/lib/sanitize";
 import { checkApiRateLimit } from "@/lib/rate-limit";
+import { Role } from "@prisma/client";
 
 export async function POST(req: NextRequest) {
   const rateLimit = checkApiRateLimit(req);
@@ -12,7 +13,7 @@ export async function POST(req: NextRequest) {
   }
 
   const session = await getServerSession(authOptions);
-  if (!session?.user) {
+  if (!session?.user?.email) {
     return NextResponse.json({ error: "Sign in required" }, { status: 401 });
   }
 
@@ -29,9 +30,22 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  // Ensure user record exists in Postgres before creating proposal
+  const email = session.user.email.toLowerCase();
+  const dbUser = await prisma.user.upsert({
+    where: { email },
+    update: { name: session.user.name || undefined },
+    create: {
+      id: session.user.id,
+      email,
+      name: session.user.name || email.split("@")[0],
+      role: (session.user.role as Role) || Role.STUDENT,
+    },
+  });
+
   const registration = await prisma.clubRegistration.create({
     data: {
-      proposedBy: session.user.id,
+      proposedBy: dbUser.id,
       name,
       category,
       description,
