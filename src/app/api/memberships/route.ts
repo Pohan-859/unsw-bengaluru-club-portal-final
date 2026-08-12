@@ -4,7 +4,6 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { sanitizeText } from "@/lib/sanitize";
 import { checkApiRateLimit } from "@/lib/rate-limit";
-import { revalidatePath } from "next/cache";
 
 export async function POST(req: NextRequest) {
   const rateLimit = checkApiRateLimit(req);
@@ -43,9 +42,6 @@ export async function POST(req: NextRequest) {
     update: { role, message, status: "PENDING", feedback: null },
     create: { userId: session.user.id, clubId, role, message, status: "PENDING" },
   });
-
-  revalidatePath(`/clubs/${club.slug}`);
-  revalidatePath("/dashboard");
 
   return NextResponse.json({ membership }, { status: 201 });
 }
