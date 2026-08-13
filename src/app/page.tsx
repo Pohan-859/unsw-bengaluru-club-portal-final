@@ -165,22 +165,18 @@ export default async function HomePage() {
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {[
               {
-                icon: "🎯",
                 title: "One-click applications",
                 desc: "Apply to any club with a single message. No paper forms, no queues.",
               },
               {
-                icon: "📊",
                 title: "Real-time tracking",
                 desc: "Check your application status from your dashboard anytime — no chasing emails.",
               },
               {
-                icon: "🛡️",
                 title: "Secure & verified",
                 desc: "Microsoft Outlook SSO ensures only UNSW students can access the portal.",
               },
               {
-                icon: "🚀",
                 title: "Launch your own club",
                 desc: "Submit a proposal, get admin approval, and your club goes live instantly.",
               },
@@ -189,8 +185,7 @@ export default async function HomePage() {
                 key={item.title}
                 className="border-2 border-unsw-charcoal bg-white p-6 shadow-brutal hover:-translate-y-1 transition-transform"
               >
-                <span className="text-3xl">{item.icon}</span>
-                <h3 className="mt-3 font-display text-base font-bold">{item.title}</h3>
+                <h3 className="font-display text-base font-bold">{item.title}</h3>
                 <p className="mt-2 text-sm text-ink/70">{item.desc}</p>
               </div>
             ))}
