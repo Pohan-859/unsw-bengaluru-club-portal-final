@@ -3,7 +3,7 @@ import { Space_Grotesk, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from "@/components/Providers";
 import Navbar from "@/components/Navbar";
-import USPBar from "@/components/USPBar";
+
 import Footer from "@/components/Footer";
 import StickyMobileCTA from "@/components/StickyMobileCTA";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
@@ -57,7 +57,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <GoogleAnalytics />
         <Providers>
           <Navbar />
-          <USPBar />
           <main className="flex-1 pb-16 md:pb-0">{children}</main>
           <Footer />
           <StickyMobileCTA />

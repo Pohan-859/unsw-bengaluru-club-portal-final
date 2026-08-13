@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import ClubCard from "@/components/ClubCard";
 
@@ -6,10 +7,10 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 const HERO_PLACARDS = [
-  { code: "BUS·01", label: "Business & Finance", href: "/clubs?category=Business+%26+Finance" },
-  { code: "TEC·04", label: "Technology", href: "/clubs?category=Technology" },
-  { code: "SPO·02", label: "Sports & Wellbeing", href: "/clubs?category=Sports+%26+Wellbeing" },
-  { code: "CUL·06", label: "Culture & Community", href: "/clubs?category=Culture+%26+Community" },
+  { code: "BUS·01", label: "Business & Finance", href: "/clubs?category=Business+%26+Finance", img: "/category-business.jpg" },
+  { code: "TEC·04", label: "Technology", href: "/clubs?category=Technology", img: "/category-technology.jpg" },
+  { code: "SPO·02", label: "Sports & Wellbeing", href: "/clubs?category=Sports+%26+Wellbeing", img: "/category-sports.jpg" },
+  { code: "CUL·06", label: "Culture & Community", href: "/clubs?category=Culture+%26+Community", img: "/category-culture.jpg" },
 ];
 
 export default async function HomePage() {
@@ -65,19 +66,27 @@ export default async function HomePage() {
             </div>
           </div>
 
-          {/* Directory-plate grid — Clickable campus wayfinding placards */}
+          {/* Directory-plate grid — Clickable campus wayfinding placards with category images */}
           <div className="grid grid-cols-2 gap-3">
             {HERO_PLACARDS.map((p) => (
               <Link
                 key={p.code}
                 href={p.href}
-                className="group flex aspect-square flex-col justify-between border-2 border-unsw-charcoal bg-unsw-charcoal p-4 text-unsw-yellow first:bg-unsw-yellow first:text-unsw-charcoal even:mt-6 transition-transform hover:-translate-y-1.5 shadow-brutal cursor-pointer"
+                className="group relative flex aspect-square flex-col justify-between border-2 border-unsw-charcoal p-4 text-unsw-yellow even:mt-6 transition-transform hover:-translate-y-1.5 shadow-brutal cursor-pointer overflow-hidden"
               >
-                <div>
-                  <span className="font-mono text-xs font-bold">{p.code}</span>
-                  <span className="block mt-1 font-display text-sm font-bold line-clamp-1">{p.label}</span>
+                <Image
+                  src={p.img}
+                  alt={p.label}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-110"
+                  sizes="(max-width: 768px) 50vw, 25vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20 transition-opacity group-hover:from-black/90" />
+                <div className="relative z-10">
+                  <span className="font-mono text-xs font-bold drop-shadow-md">{p.code}</span>
+                  <span className="block mt-1 font-display text-sm font-bold line-clamp-1 drop-shadow-md">{p.label}</span>
                 </div>
-                <span className="font-display text-2xl font-bold transition-transform group-hover:translate-x-1">→</span>
+                <span className="relative z-10 font-display text-2xl font-bold transition-transform group-hover:translate-x-1 drop-shadow-md">→</span>
               </Link>
             ))}
           </div>
@@ -131,7 +140,7 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* Closing CTA */}
+      {/* Closing CTA + Campus highlights (fills the grey area below) */}
       <section className="border-t-2 border-unsw-charcoal bg-unsw-yellow">
         <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-4 px-4 py-12 sm:flex-row sm:items-center">
           <h2 className="font-display text-2xl font-bold">
@@ -143,6 +152,62 @@ export default async function HomePage() {
           >
             Start a proposal
           </Link>
+        </div>
+      </section>
+
+      {/* Campus highlights — fills the grey area */}
+      <section className="bg-paper border-t-2 border-line">
+        <div className="mx-auto max-w-6xl px-4 py-16">
+          <h2 className="font-display text-2xl font-bold text-center">Why join through the portal?</h2>
+          <p className="mt-2 text-center text-sm text-ink/70 max-w-xl mx-auto">
+            The UNSW Bengaluru Club Portal is the official way to discover, join, and manage campus organizations.
+          </p>
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              {
+                icon: "🎯",
+                title: "One-click applications",
+                desc: "Apply to any club with a single message. No paper forms, no queues.",
+              },
+              {
+                icon: "📊",
+                title: "Real-time tracking",
+                desc: "Check your application status from your dashboard anytime — no chasing emails.",
+              },
+              {
+                icon: "🛡️",
+                title: "Secure & verified",
+                desc: "Microsoft Outlook SSO ensures only UNSW students can access the portal.",
+              },
+              {
+                icon: "🚀",
+                title: "Launch your own club",
+                desc: "Submit a proposal, get admin approval, and your club goes live instantly.",
+              },
+            ].map((item) => (
+              <div
+                key={item.title}
+                className="border-2 border-unsw-charcoal bg-white p-6 shadow-brutal hover:-translate-y-1 transition-transform"
+              >
+                <span className="text-3xl">{item.icon}</span>
+                <h3 className="mt-3 font-display text-base font-bold">{item.title}</h3>
+                <p className="mt-2 text-sm text-ink/70">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-12 grid gap-6 sm:grid-cols-3 text-center">
+            {[
+              { stat: `${clubCount || "6"}+`, label: "Active clubs" },
+              { stat: "3–5", label: "Days to review" },
+              { stat: "100%", label: "Digital & paperless" },
+            ].map((s) => (
+              <div key={s.label} className="border-2 border-unsw-charcoal bg-unsw-charcoal p-6 shadow-brutal">
+                <span className="font-display text-3xl font-bold text-unsw-yellow">{s.stat}</span>
+                <p className="mt-1 font-mono text-xs uppercase tracking-wide text-paper/80">{s.label}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
     </>
