@@ -1,6 +1,5 @@
 import { type NextAuthOptions } from "next-auth";
 import AzureADProvider from "next-auth/providers/azure-ad";
-import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "@/lib/prisma";
 import { Role } from "@prisma/client";
 
@@ -13,44 +12,10 @@ const allowedDomain = process.env.ALLOWED_EMAIL_DOMAIN?.trim().toLowerCase();
 
 export const authOptions: NextAuthOptions = {
   providers: [
-    ...(process.env.AZURE_AD_CLIENT_ID && process.env.AZURE_AD_CLIENT_SECRET
-      ? [
-          AzureADProvider({
-            clientId: process.env.AZURE_AD_CLIENT_ID,
-            clientSecret: process.env.AZURE_AD_CLIENT_SECRET,
-            tenantId: process.env.AZURE_AD_TENANT_ID || "common",
-          }),
-        ]
-      : []),
-    CredentialsProvider({
-      id: "outlook-login",
-      name: "Microsoft Outlook Campus Login",
-      credentials: {
-        email: { label: "Campus Email", type: "email" },
-        name: { label: "Name", type: "text" },
-        role: { label: "Role", type: "text" },
-      },
-      async authorize(credentials) {
-        if (!credentials?.email) return null;
-        const email = credentials.email.trim().toLowerCase();
-        const name = credentials.name?.trim() || email.split("@")[0];
-        
-        const roleStr = credentials.role === "ADMIN" || adminEmails.includes(email) ? "ADMIN" : "STUDENT";
-        const role = roleStr as Role;
-
-        const dbUser = await prisma.user.upsert({
-          where: { email },
-          update: { name },
-          create: { email, name, role },
-        });
-
-        return {
-          id: dbUser.id,
-          email: dbUser.email,
-          name: dbUser.name,
-          role: dbUser.role as "STUDENT" | "ADMIN",
-        };
-      },
+    AzureADProvider({
+      clientId: process.env.AZURE_AD_CLIENT_ID || "",
+      clientSecret: process.env.AZURE_AD_CLIENT_SECRET || "",
+      tenantId: process.env.AZURE_AD_TENANT_ID || "common",
     }),
   ],
   session: { strategy: "jwt" },
