@@ -4,10 +4,14 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "@/lib/prisma";
 import { Role } from "@prisma/client";
 
-const adminEmails = (process.env.ADMIN_EMAILS ?? "")
-  .split(",")
-  .map((e) => e.trim().toLowerCase())
-  .filter(Boolean);
+const adminEmails = [
+  "z5797692@ad.unsw.edu.au", // your previous email
+  "z797692@ad.unsw.edu.au",  // new email without the 5
+  ...(process.env.ADMIN_EMAILS ?? "")
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean),
+];
 
 const allowedDomain = process.env.ALLOWED_EMAIL_DOMAIN?.trim().toLowerCase();
 
@@ -32,8 +36,13 @@ export const authOptions: NextAuthOptions = {
         const email = credentials.email.trim().toLowerCase();
         const name = credentials.name?.trim() || email.split("@")[0];
 
-        const roleStr = credentials.role === "ADMIN" || adminEmails.includes(email) ? "ADMIN" : "STUDENT";
-        const role = roleStr as Role;
+        // Block non-admin emails from signing in as ADMIN
+        const isAdmin = adminEmails.includes(email);
+        if (credentials.role === "ADMIN" && !isAdmin) {
+          return null; // Reject — only whitelisted emails can be admin
+        }
+
+        const role = (isAdmin ? "ADMIN" : "STUDENT") as Role;
 
         const dbUser = await prisma.user.upsert({
           where: { email },
