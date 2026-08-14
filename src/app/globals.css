@@ -11,33 +11,6 @@
     @apply bg-paper text-ink font-body antialiased;
   }
 
-  html[data-theme="dark"] {
-    color-scheme: dark;
-    background-color: #121212;
-  }
-
-  html[data-theme="dark"] body {
-    background-color: #121212;
-    color: #f6f6f4;
-  }
-
-  html[data-theme="dark"] .bg-paper {
-    background-color: #1a1a1a;
-  }
-
-  html[data-theme="dark"] .bg-white {
-    background-color: #1e1e1e;
-    color: #f6f6f4;
-  }
-
-  html[data-theme="dark"] .text-ink {
-    color: #f6f6f4;
-  }
-
-  html[data-theme="dark"] .border-line {
-    border-color: #333333;
-  }
-
   h1,
   h2,
   h3,
@@ -45,8 +18,7 @@
     @apply font-display;
   }
 
-  /* Visible keyboard focus everywhere — never rely on the browser default
-     outline alone, but never remove it either. */
+  /* Visible keyboard focus everywhere */
   :focus-visible {
     outline: 3px solid #231f20;
     outline-offset: 2px;
@@ -56,12 +28,123 @@
     background-color: #ffe600;
     color: #231f20;
   }
+
+  /* =======================================================
+     DARK MODE THEME OVERRIDES
+     ======================================================= */
+  html[data-theme="dark"] {
+    color-scheme: dark;
+    background-color: #121212;
+  }
+
+  html[data-theme="dark"] body {
+    background-color: #121212;
+    color: #ffffff;
+  }
+
+  /* 1. LARGE TEXT / HEADINGS -> YELLOW (#FFE600) */
+  html[data-theme="dark"] h1,
+  html[data-theme="dark"] h2,
+  html[data-theme="dark"] h3,
+  html[data-theme="dark"] h4,
+  html[data-theme="dark"] .font-display:not(.btn-text) {
+    color: #ffe600 !important;
+  }
+
+  /* 2. SMALL TEXT / BODY / MUTED / PARAGRAPHS -> WHITE (#FFFFFF) */
+  html[data-theme="dark"] p,
+  html[data-theme="dark"] span:not(.bg-unsw-yellow):not(.text-unsw-yellow):not(.bg-unsw-charcoal),
+  html[data-theme="dark"] label,
+  html[data-theme="dark"] li,
+  html[data-theme="dark"] dt,
+  html[data-theme="dark"] dd,
+  html[data-theme="dark"] div:not(.bg-unsw-yellow):not(.bg-unsw-charcoal),
+  html[data-theme="dark"] .font-mono:not(.bg-unsw-yellow),
+  html[data-theme="dark"] .text-ink,
+  html[data-theme="dark"] .text-ink\/70,
+  html[data-theme="dark"] .text-ink\/80,
+  html[data-theme="dark"] .text-muted,
+  html[data-theme="dark"] .text-unsw-charcoal {
+    color: #ffffff;
+  }
+
+  /* Navigation & links in dark mode */
+  html[data-theme="dark"] a:not(.bg-unsw-yellow):not(.btn-yellow) {
+    color: #ffffff;
+  }
+  html[data-theme="dark"] a:not(.bg-unsw-yellow):not(.btn-yellow):hover {
+    color: #ffe600;
+  }
+
+  /* Header & Navigation Bar in dark mode */
+  html[data-theme="dark"] header,
+  html[data-theme="dark"] nav {
+    background-color: #181818 !important;
+    border-color: #333333 !important;
+  }
+
+  /* Card and Paper backgrounds in dark mode */
+  html[data-theme="dark"] .bg-paper {
+    background-color: #121212 !important;
+  }
+
+  html[data-theme="dark"] .bg-white {
+    background-color: #1a1a1a !important;
+    color: #ffffff;
+    border-color: #333333 !important;
+  }
+
+  /* Inputs, Search Bars, Selects, Textareas */
+  html[data-theme="dark"] input,
+  html[data-theme="dark"] textarea,
+  html[data-theme="dark"] select {
+    background-color: #242424 !important;
+    color: #ffffff !important;
+    border-color: #555555 !important;
+  }
+
+  html[data-theme="dark"] input::placeholder,
+  html[data-theme="dark"] textarea::placeholder {
+    color: #aaaaaa !important;
+  }
+
+  /* Filter pills & buttons in dark mode */
+  html[data-theme="dark"] button:not(.bg-unsw-yellow) {
+    border-color: #444444;
+  }
+
+  /* Yellow buttons / badges retain black text for crisp contrast */
+  html[data-theme="dark"] .bg-unsw-yellow,
+  html[data-theme="dark"] .bg-unsw-yellow *,
+  html[data-theme="dark"] button.bg-unsw-yellow,
+  html[data-theme="dark"] a.bg-unsw-yellow {
+    background-color: #ffe600 !important;
+    color: #231f20 !important;
+  }
+
+  /* Borders & Shadows in dark mode */
+  html[data-theme="dark"] .border-unsw-charcoal,
+  html[data-theme="dark"] .border-line {
+    border-color: #444444 !important;
+  }
+
+  html[data-theme="dark"] .shadow-brutal,
+  html[data-theme="dark"] .shadow-plate {
+    box-shadow: 4px 4px 0 0 #000000 !important;
+  }
+
+  /* 3. LOGO BLENDING IN DARK MODE */
+  html[data-theme="dark"] img[src*="unsw-logo"] {
+    filter: invert(1) hue-rotate(180deg);
+  }
+
+  html[data-theme="dark"] .logo-container {
+    background-color: transparent !important;
+    border-color: #444444 !important;
+  }
 }
 
 @layer utilities {
-  /* The "directory plate" signature used on club cards & admin rows — a
-     nod to UNSW's physical campus wayfinding signage (charcoal placards,
-     yellow index numbers) carried into the digital directory. */
   .plate {
     @apply border-2 border-unsw-charcoal bg-white shadow-plate transition-transform;
   }

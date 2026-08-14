@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function SignInPage() {
   return (
     <div className="mx-auto flex max-w-md flex-col items-center px-4 py-16 text-center">
-      <div className="bg-white p-3 border-2 border-unsw-charcoal shadow-brutal mb-4">
+      <div className="logo-container bg-white p-3 border-2 border-unsw-charcoal shadow-brutal mb-4">
         <Image
           src="/unsw-logo.png"
           alt="UNSW Bengaluru Logo"
