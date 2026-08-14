@@ -23,14 +23,16 @@ export default function Navbar() {
     <header className="sticky top-0 z-40 border-b-2 border-unsw-charcoal bg-white shadow-sm">
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-2.5">
         <Link href="/" className="flex items-center gap-3">
-          <Image
-            src="/unsw-logo.png"
-            alt="UNSW Bengaluru Logo"
-            width={160}
-            height={44}
-            className="h-10 w-auto object-contain"
-            priority
-          />
+          <div className="logo-badge shadow-brutal">
+            <Image
+              src="/unsw-logo.png"
+              alt="UNSW Bengaluru Logo"
+              width={160}
+              height={44}
+              className="h-8 w-auto object-contain"
+              priority
+            />
+          </div>
           <span className="hidden font-display text-sm font-bold uppercase tracking-wider text-unsw-charcoal sm:inline-block border-l-2 border-unsw-charcoal pl-3">
             Club Portal
           </span>

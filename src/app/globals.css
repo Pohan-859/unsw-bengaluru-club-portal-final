@@ -42,37 +42,35 @@
     color: #ffffff;
   }
 
-  /* 1. LARGE TEXT / HEADINGS -> YELLOW (#FFE600) */
+  /* 1. LARGE TEXT / HEADINGS -> YELLOW (#FFE600) (except inside yellow CTA sections) */
   html[data-theme="dark"] h1,
-  html[data-theme="dark"] h2,
-  html[data-theme="dark"] h3,
-  html[data-theme="dark"] h4,
-  html[data-theme="dark"] .font-display:not(.btn-text) {
-    color: #ffe600 !important;
+  html[data-theme="dark"] h2:not(.bg-unsw-yellow *),
+  html[data-theme="dark"] h3:not(.bg-unsw-yellow *),
+  html[data-theme="dark"] h4:not(.bg-unsw-yellow *) {
+    color: #ffe600;
   }
 
   /* 2. SMALL TEXT / BODY / MUTED / PARAGRAPHS -> WHITE (#FFFFFF) */
-  html[data-theme="dark"] p,
-  html[data-theme="dark"] span:not(.bg-unsw-yellow):not(.text-unsw-yellow):not(.bg-unsw-charcoal),
+  html[data-theme="dark"] p:not(.bg-unsw-yellow *),
+  html[data-theme="dark"] span:not(.bg-unsw-yellow *):not(.bg-unsw-charcoal *):not(.text-unsw-yellow),
   html[data-theme="dark"] label,
   html[data-theme="dark"] li,
   html[data-theme="dark"] dt,
   html[data-theme="dark"] dd,
-  html[data-theme="dark"] div:not(.bg-unsw-yellow):not(.bg-unsw-charcoal),
-  html[data-theme="dark"] .font-mono:not(.bg-unsw-yellow),
+  html[data-theme="dark"] .font-mono:not(.bg-unsw-yellow *),
   html[data-theme="dark"] .text-ink,
   html[data-theme="dark"] .text-ink\/70,
   html[data-theme="dark"] .text-ink\/80,
   html[data-theme="dark"] .text-muted,
-  html[data-theme="dark"] .text-unsw-charcoal {
+  html[data-theme="dark"] .text-unsw-charcoal:not(.bg-unsw-yellow *) {
     color: #ffffff;
   }
 
-  /* Navigation & links in dark mode */
-  html[data-theme="dark"] a:not(.bg-unsw-yellow):not(.btn-yellow) {
+  /* Links in dark mode */
+  html[data-theme="dark"] a:not(.bg-unsw-yellow *):not(.bg-unsw-charcoal) {
     color: #ffffff;
   }
-  html[data-theme="dark"] a:not(.bg-unsw-yellow):not(.btn-yellow):hover {
+  html[data-theme="dark"] a:not(.bg-unsw-yellow *):not(.bg-unsw-charcoal):hover {
     color: #ffe600;
   }
 
@@ -108,18 +106,54 @@
     color: #aaaaaa !important;
   }
 
-  /* Filter pills & buttons in dark mode */
-  html[data-theme="dark"] button:not(.bg-unsw-yellow) {
-    border-color: #444444;
-  }
-
-  /* Yellow buttons / badges retain black text for crisp contrast */
-  html[data-theme="dark"] .bg-unsw-yellow,
-  html[data-theme="dark"] .bg-unsw-yellow *,
-  html[data-theme="dark"] button.bg-unsw-yellow,
-  html[data-theme="dark"] a.bg-unsw-yellow {
+  /* =======================================================
+     YELLOW BANNER / CTA SECTION RULES (e.g. Start a Proposal)
+     ======================================================= */
+  /* Yellow section background stays yellow in both light & dark mode */
+  .bg-unsw-yellow {
     background-color: #ffe600 !important;
     color: #231f20 !important;
+  }
+
+  .bg-unsw-yellow h1,
+  .bg-unsw-yellow h2,
+  .bg-unsw-yellow h3,
+  .bg-unsw-yellow p,
+  .bg-unsw-yellow span {
+    color: #231f20 !important;
+  }
+
+  /* Start a Proposal Button inside Yellow CTA section */
+  .bg-unsw-yellow .bg-unsw-charcoal,
+  button.bg-unsw-charcoal,
+  a.bg-unsw-charcoal {
+    background-color: #231f20 !important;
+    color: #ffe600 !important;
+    border-color: #231f20 !important;
+  }
+
+  .bg-unsw-yellow .bg-unsw-charcoal:hover,
+  button.bg-unsw-charcoal:hover,
+  a.bg-unsw-charcoal:hover {
+    background-color: #ffffff !important;
+    color: #231f20 !important;
+  }
+
+  /* =======================================================
+     OFFICIAL UNIVERSITY LOGO BADGE
+     ======================================================= */
+  /* Official logo remains untouched (no color inversion). Wrapped in a clean white badge */
+  .logo-badge {
+    background-color: #ffffff !important;
+    padding: 3px 6px;
+    border: 2px solid #231f20;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  html[data-theme="dark"] .logo-badge {
+    border-color: #555555 !important;
   }
 
   /* Borders & Shadows in dark mode */
@@ -131,16 +165,6 @@
   html[data-theme="dark"] .shadow-brutal,
   html[data-theme="dark"] .shadow-plate {
     box-shadow: 4px 4px 0 0 #000000 !important;
-  }
-
-  /* 3. LOGO BLENDING IN DARK MODE */
-  html[data-theme="dark"] img[src*="unsw-logo"] {
-    filter: invert(1) hue-rotate(180deg);
-  }
-
-  html[data-theme="dark"] .logo-container {
-    background-color: transparent !important;
-    border-color: #444444 !important;
   }
 }
 
