@@ -48,14 +48,6 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
   },
-  icons: {
-    icon: [
-      { url: "/icon.png?v=5", type: "image/png" },
-      { url: "/favicon.ico?v=5" },
-    ],
-    shortcut: "/icon.png?v=5",
-    apple: "/apple-icon.png?v=5",
-  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
