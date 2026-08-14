@@ -49,9 +49,12 @@ export const metadata: Metadata = {
     card: "summary_large_image",
   },
   icons: {
-    icon: "/unsw-logo.png",
-    shortcut: "/unsw-logo.png",
-    apple: "/unsw-logo.png",
+    icon: [
+      { url: "/icon.png", type: "image/png" },
+      { url: "/favicon.ico" },
+    ],
+    shortcut: "/icon.png",
+    apple: "/icon.png",
   },
 };
 
