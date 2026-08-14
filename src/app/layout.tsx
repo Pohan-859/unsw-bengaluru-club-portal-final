@@ -50,11 +50,11 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/icon.png?v=2", type: "image/png" },
-      { url: "/favicon.ico?v=2" },
+      { url: "/icon.png?v=3", type: "image/png" },
+      { url: "/favicon.ico?v=3" },
     ],
-    shortcut: "/icon.png?v=2",
-    apple: "/apple-icon.png?v=2",
+    shortcut: "/icon.png?v=3",
+    apple: "/apple-icon.png?v=3",
   },
 };
 
