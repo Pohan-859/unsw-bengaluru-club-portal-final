@@ -48,6 +48,11 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
   },
+  icons: {
+    icon: "/unsw-logo.png",
+    shortcut: "/unsw-logo.png",
+    apple: "/unsw-logo.png",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
