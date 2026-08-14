@@ -51,7 +51,13 @@ export default async function DashboardPage() {
             )}
           </p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-3">
+          <Link
+            href={`/u/${session.user.email}`}
+            className="border-2 border-unsw-charcoal bg-white px-4 py-2 text-xs font-bold uppercase tracking-wide hover:bg-paper"
+          >
+            My Public Profile 👤
+          </Link>
           <Link
             href="/clubs"
             className="border-2 border-unsw-charcoal bg-white px-4 py-2 text-xs font-bold uppercase tracking-wide hover:bg-paper"

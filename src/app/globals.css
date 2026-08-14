@@ -11,6 +11,33 @@
     @apply bg-paper text-ink font-body antialiased;
   }
 
+  html[data-theme="dark"] {
+    color-scheme: dark;
+    background-color: #121212;
+  }
+
+  html[data-theme="dark"] body {
+    background-color: #121212;
+    color: #f6f6f4;
+  }
+
+  html[data-theme="dark"] .bg-paper {
+    background-color: #1a1a1a;
+  }
+
+  html[data-theme="dark"] .bg-white {
+    background-color: #1e1e1e;
+    color: #f6f6f4;
+  }
+
+  html[data-theme="dark"] .text-ink {
+    color: #f6f6f4;
+  }
+
+  html[data-theme="dark"] .border-line {
+    border-color: #333333;
+  }
+
   h1,
   h2,
   h3,

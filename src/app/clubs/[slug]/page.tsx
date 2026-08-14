@@ -5,6 +5,9 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import ApplyForm from "@/components/ApplyForm";
+import AnnouncementFeed from "@/components/AnnouncementFeed";
+import PostAnnouncementForm from "@/components/PostAnnouncementForm";
+import EventCard from "@/components/EventCard";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -47,9 +50,24 @@ export default async function ClubDetailPage({ params }: { params: { slug: strin
     session?.user?.role === "ADMIN" ||
     (viewerMembership?.role === "EXECUTIVE" && viewerMembership?.status === "APPROVED");
 
-  const memberCount = await prisma.membership.count({
-    where: { clubId: club.id, status: "APPROVED" },
-  });
+  const [memberCount, events, announcements] = await Promise.all([
+    prisma.membership.count({
+      where: { clubId: club.id, status: "APPROVED" },
+    }),
+    prisma.event.findMany({
+      where: { clubId: club.id, startTime: { gte: new Date() } },
+      orderBy: { startTime: "asc" },
+      include: {
+        club: { select: { name: true, slug: true } },
+        _count: { select: { rsvps: true } },
+      },
+    }),
+    prisma.announcement.findMany({
+      where: { clubId: club.id },
+      orderBy: [{ isPinned: "desc" }, { createdAt: "desc" }],
+      include: { author: { select: { name: true } } },
+    }),
+  ]);
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-12">
@@ -163,6 +181,41 @@ export default async function ClubDetailPage({ params }: { params: { slug: strin
           </div>
 
           <p className="font-mono text-xs text-muted">👥 {memberCount} approved campus members</p>
+
+          {/* Upcoming Events */}
+          <div className="pt-6 border-t-2 border-line">
+            <div className="flex items-center justify-between">
+              <h2 className="font-display text-xl font-bold">Upcoming Events</h2>
+              {isExecutiveOrAdmin && (
+                <Link
+                  href={`/events/new?clubId=${club.id}`}
+                  className="border-2 border-unsw-charcoal bg-unsw-yellow px-3 py-1 text-xs font-bold uppercase tracking-wide hover:bg-unsw-charcoal hover:text-unsw-yellow transition-colors shadow-brutal"
+                >
+                  + Create Event
+                </Link>
+              )}
+            </div>
+            {events.length > 0 ? (
+              <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                {events.map((evt) => (
+                  <EventCard key={evt.id} event={evt} />
+                ))}
+              </div>
+            ) : (
+              <p className="mt-2 text-sm text-muted">No upcoming events scheduled right now.</p>
+            )}
+          </div>
+
+          {/* Announcements / Updates */}
+          <div className="pt-6 border-t-2 border-line">
+            <h2 className="font-display text-xl font-bold mb-4">Announcements &amp; Updates</h2>
+            {isExecutiveOrAdmin && (
+              <div className="mb-6">
+                <PostAnnouncementForm clubId={club.id} />
+              </div>
+            )}
+            <AnnouncementFeed announcements={announcements} />
+          </div>
         </div>
 
         <div>

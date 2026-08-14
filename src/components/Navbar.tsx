@@ -5,9 +5,11 @@ import Image from "next/image";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { SignInButton } from "./SignInButton";
+import { ThemeToggle } from "./ThemeToggle";
 
 const links = [
   { href: "/clubs", label: "Directory" },
+  { href: "/events", label: "Events" },
   { href: "/clubs/new", label: "Propose a club" },
   { href: "/faq", label: "FAQs" },
   { href: "/contact", label: "Contact" },
@@ -54,6 +56,7 @@ export default function Navbar() {
             </Link>
           )}
           <SignInButton />
+          <ThemeToggle />
         </div>
 
         <button
